@@ -1,0 +1,11 @@
+namespace Insights.core_db.data;
+
+context ruleset {
+
+    /*@@layout{"layoutInfo":{"x":347,"y":-80.5}}*/
+    entity md_module {
+        key module_id   : String(10) not null;
+            module_name : String(60) not null;
+    };
+
+};
