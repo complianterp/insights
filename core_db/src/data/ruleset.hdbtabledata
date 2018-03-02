@@ -1,23 +1,31 @@
 {
 	"format_version": 1,
 	"imports": [{
-		"target_table": "Insights.core_db.data::ruleset.md_module",
+		"target_table": "ruleset.module",
 		"source_data": {
 			"data_type": "CSV",
-			"file_name": "Insights.core_db.data::md_module.csv",
+			"file_name": "md_module.csv",
 			"has_header": true,
 			"dialect": "HANA",
 			"type_config": {
 				"delimiter": ","
 			}
 		},
-		"import_settings": {
-			"import_columns": ["module_id",
-			"module_name"]
+		"import_settings": {"import_columns": ["moduleId", "moduleName"]},
+		"column_mappings": {"moduleId": 1,	"moduleName": 2}
+	},
+	{
+		"target_table": "ruleset.subModule",
+		"source_data": {
+			"data_type": "CSV",
+			"file_name": "md_submodule.csv",
+			"has_header": true,
+			"dialect": "HANA",
+			"type_config": {
+				"delimiter": ","
+			}
 		},
-		"column_mappings": {
-			"module_id": 1,
-			"module_name": 2
-		}
-	}]
+		"import_settings": {"import_columns": ["moduleId","subModuleId","subModuleName"]},
+		"column_mappings": {"moduleId": 1,"subModuleId": 2,"subModuleName": 3}
+	}]	
 }

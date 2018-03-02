@@ -1,5 +1,4 @@
 package com.complianterp.insights.service;
-
 /**
  *
  * @author S0016910852
@@ -33,8 +32,8 @@ public class RuleSetService {
 
 	private static Logger logger = LoggerFactory.getLogger(RuleSetService.class);
 
-	@Query(entity = "md_module", serviceName = "ruleset")
-	public QueryResponse findTasks(QueryRequest request) {
+	@Query(entity = "module", serviceName = "ruleset")
+	public QueryResponse findModule(QueryRequest request) {
 		try {
 			QueryResponse res = QueryResponse.setSuccess().setEntityData(getEntitySet(request)).response();
 			return res;
@@ -43,7 +42,7 @@ public class RuleSetService {
 		}
 	}
 
-	@Read(entity = "md_module", serviceName = "ruleset")
+	@Read(entity = "module", serviceName = "ruleset")
 	public ReadResponse getProposedBooks(ReadRequest readRequest) {
 		try {
 			ReadResponse readResponse = ReadResponse.setSuccess().setData(readEntity(readRequest)).response();
@@ -54,10 +53,8 @@ public class RuleSetService {
 	}
 
 	private List<EntityData> getEntitySet(QueryRequest queryRequest) {
-		String fullQualifiedName = queryRequest.getEntityMetadata().getNamespace() + "."
-				+ queryRequest.getEntityMetadata().getName();
-		CDSDataSourceHandler dsHandler = DataSourceHandlerFactory.getInstance().getCDSHandler(getConnection(),
-				queryRequest.getEntityMetadata().getNamespace());
+		String fullQualifiedName = queryRequest.getEntityMetadata().getNamespace() + "." + queryRequest.getEntityMetadata().getName();
+		CDSDataSourceHandler dsHandler = DataSourceHandlerFactory.getInstance().getCDSHandler(getConnection(), queryRequest.getEntityMetadata().getNamespace());
 		try {
 			CDSQuery cdsQuery = new CDSSelectQueryBuilder(fullQualifiedName).build();
 			CDSSelectQueryResult cdsSelectQueryResult = dsHandler.executeQuery(cdsQuery);
@@ -70,10 +67,8 @@ public class RuleSetService {
 	}
 
 	private EntityData readEntity(ReadRequest readRequest) throws Exception {
-		CDSDataSourceHandler dsHandler = DataSourceHandlerFactory.getInstance().getCDSHandler(getConnection(),
-				readRequest.getEntityMetadata().getNamespace());
-		EntityData ed = dsHandler.executeRead(readRequest.getEntityMetadata().getName(), readRequest.getKeys(),
-				readRequest.getEntityMetadata().getElementNames());
+		CDSDataSourceHandler dsHandler = DataSourceHandlerFactory.getInstance().getCDSHandler(getConnection(), readRequest.getEntityMetadata().getNamespace());
+		EntityData ed = dsHandler.executeRead(readRequest.getEntityMetadata().getName(), readRequest.getKeys(), readRequest.getEntityMetadata().getElementNames());
 		return ed;
 	}
 

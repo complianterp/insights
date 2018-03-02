@@ -1,21 +1,17 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
 	<edmx:DataServices>
-		<Schema xmlns="http://docs.oasis-open.org/odata/ns/edm" Namespace="Insights">
-			<EntityType Name="md_module">
+		<Schema xmlns="http://docs.oasis-open.org/odata/ns/edm" Namespace="ruleset">
+			<EntityType Name="module">
 				<Key>
 					<PropertyRef Name="module_id"/>
 				</Key>
 				<Property Name="module_id" Type="Edm.String" Nullable="false" MaxLength="10"/>
 				<Property Name="module_name" Type="Edm.String" Nullable="false" MaxLength="60"/>
 			</EntityType>
-			<Property Name="moduleId" Type="Edm.String" Nullable="false" MaxLength="10"/>
-			<Property Name="content" Type="Edm.String" Nullable="false" MaxLength="250"/>
-			<Property Name="status" Type="Edm.Int16"/>
-		</EntityType>
-		<EntityContainer Name="EntityContainer_16ED33654DD94D7FA71D8CBCD0F62216">
-			<EntitySet Name="md_module" EntityType="Insights.ruleset"></EntitySet>
-		</EntityContainer>
-	</Schema>
-</edmx:DataServices>
+			<EntityContainer Name="EntityContainer_16ED33654DD94D7FA71D8CBCD0F62216">
+				<EntitySet Name="module" EntityType="ruleset.module"></EntitySet>
+			</EntityContainer>
+		</Schema>
+	</edmx:DataServices>
 </edmx:Edmx>

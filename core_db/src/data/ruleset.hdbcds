@@ -1,11 +1,25 @@
-namespace Insights.core_db.data;
+/*namespace Insights.core_db.data;*/
 
 context ruleset {
 
     /*@@layout{"layoutInfo":{"x":347,"y":-80.5}}*/
-    entity md_module {
-        key module_id   : String(10) not null;
-            module_name : String(60) not null;
+    entity module {
+        key moduleId   : String(10) not null;
+            moduleName : String(60) not null;
+            subModules : Association [0..*] to subModule on subModules.moduleId=moduleId;
     };
 
+    /*@@layout{"layoutInfo":{"x":626,"y":-80.5}}*/
+    entity subModule {
+        key moduleId      : String(10) not null;
+        key subModuleId   : String(10) not null;
+            subModuleName : String(60) not null;
+            toModule	  : Association [1] to module on toModule.moduleId=moduleId;
+    };
+	define view moduleDetail as SELECT from module {
+		moduleId,
+		moduleName,
+		subModules.subModuleId,
+		subModules.subModuleName
+	};
 };

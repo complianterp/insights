@@ -1,0 +1,6 @@
+module,subModuleId,subModuleName
+FI,AP,Accounts Payable
+FI,AR,Accounts Receivable
+FI,GL,General Ledger
+MM,PO,Purchasing
+MM,IN,Inventory
