@@ -52,6 +52,25 @@ public class RuleSetService {
 		}
 	}
 
+	@Query(entity = "subModule", serviceName = "ruleset")
+	public QueryResponse findSubModule(QueryRequest request) {
+		try {
+			QueryResponse res = QueryResponse.setSuccess().setEntityData(getEntitySet(request)).response();
+			return res;
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	@Read(entity = "subModule", serviceName = "ruleset")
+	public ReadResponse getSubModule(ReadRequest readRequest) {
+		try {
+			ReadResponse readResponse = ReadResponse.setSuccess().setData(readEntity(readRequest)).response();
+			return readResponse;
+		} catch (Exception e) {
+			return null;
+		}
+	}
 	private List<EntityData> getEntitySet(QueryRequest queryRequest) {
 		String fullQualifiedName = queryRequest.getEntityMetadata().getNamespace() + "." + queryRequest.getEntityMetadata().getName();
 		CDSDataSourceHandler dsHandler = DataSourceHandlerFactory.getInstance().getCDSHandler(getConnection(), queryRequest.getEntityMetadata().getNamespace());

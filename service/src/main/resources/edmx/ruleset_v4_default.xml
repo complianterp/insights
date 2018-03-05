@@ -4,13 +4,23 @@
 		<Schema xmlns="http://docs.oasis-open.org/odata/ns/edm" Namespace="ruleset">
 			<EntityType Name="module">
 				<Key>
-					<PropertyRef Name="module_id"/>
+					<PropertyRef Name="moduleId"/>
 				</Key>
-				<Property Name="module_id" Type="Edm.String" Nullable="false" MaxLength="10"/>
-				<Property Name="module_name" Type="Edm.String" Nullable="false" MaxLength="60"/>
+				<Property Name="moduleId" Type="Edm.String" Nullable="false" MaxLength="10"/>
+				<Property Name="moduleName" Type="Edm.String" Nullable="false" MaxLength="60"/>
 			</EntityType>
-			<EntityContainer Name="EntityContainer_16ED33654DD94D7FA71D8CBCD0F62216">
+			<EntityType Name="subModule">
+				<Key>
+					<PropertyRef Name="moduleId"/>
+					<PropertyRef Name="subModuleId"/>
+				</Key>
+				<Property Name="moduleId" Type="Edm.String" Nullable="false" MaxLength="10"/>
+				<Property Name="subModuleId" Type="Edm.String" Nullable="false" MaxLength="10"/>
+				<Property Name="subModuleName" Type="Edm.String" Nullable="false" MaxLength="60"/>
+			</EntityType>			
+			<EntityContainer Name="EC1">
 				<EntitySet Name="module" EntityType="ruleset.module"></EntitySet>
+				<EntitySet Name="subModule" EntityType="ruleset.subModule"></EntitySet>
 			</EntityContainer>
 		</Schema>
 	</edmx:DataServices>
