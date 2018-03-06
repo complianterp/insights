@@ -38,32 +38,32 @@ import com.sap.cloud.sdk.service.prov.api.response.UpdateResponse;
  *
  * @author S0016910852
  */
-public class RuleSetService {
+public class EPMSampleService {
 
-	@Query(entity = "modules", serviceName = "RuleSetService")
-	public QueryResponse getAllmodules(QueryRequest queryRequest) {
+	@Query(entity = "SalesOrders", serviceName = "EPMSampleService")
+	public QueryResponse getAllSalesOrders(QueryRequest queryRequest) {
 		QueryResponse queryResponse = QueryResponse.setSuccess().setEntityData(getEntitySet(queryRequest)).response();
 		return queryResponse;
 	}
 
-	@Query(entity = "subModules", serviceName = "RuleSetService")
+	@Query(entity = "SalesOrderLineItems", serviceName = "EPMSampleService")
 	public QueryResponse getAllSOLineItems(QueryRequest queryRequest) {
 		QueryResponse queryResponse = QueryResponse.setSuccess().setEntityData(getEntitySet(queryRequest)).response();
 		return queryResponse;
 	}
 
-	@Query(entity = "subModules", serviceName = "RuleSetService", sourceEntity = "modules")
+	@Query(entity = "SalesOrderLineItems", serviceName = "EPMSampleService", sourceEntity = "SalesOrders")
 	public QueryResponse getSOLineItemsForSO(QueryRequest queryRequest) {
 		QueryResponse queryResponse = null;
 		EntityData SOEntity;
 		try {
 			String sourceEntityName = queryRequest.getSourceEntityName();
-			//Read modules to check if the passed moduleId exists
-			if (sourceEntityName.equals("modules")) {
-				SOEntity = readmodule(queryRequest.getSourceKeys());
+			//Read SalesOrders to check if the passed SalesOrderID exists
+			if (sourceEntityName.equals("SalesOrders")) {
+				SOEntity = readSalesOrder(queryRequest.getSourceKeys());
 				if (SOEntity == null) {
 					ErrorResponse errorResponse = ErrorResponse.getBuilder()
-							.setMessage("Parent module does not exist").setStatusCode(401).response();
+							.setMessage("Parent SalesOrder does not exist").setStatusCode(401).response();
 					queryResponse = QueryResponse.setError(errorResponse);
 				} else {
 					queryResponse = QueryResponse.setSuccess()
@@ -78,27 +78,27 @@ public class RuleSetService {
 		return queryResponse;
 	}
 
-	@Create(entity = "modules", serviceName = "RuleSetService")
-	public CreateResponse createmodule(CreateRequest createRequest) {
+	@Create(entity = "SalesOrders", serviceName = "EPMSampleService")
+	public CreateResponse createSalesOrder(CreateRequest createRequest) {
 		CreateResponse createResponse = CreateResponse.setSuccess().setData(createEntity(createRequest)).response();
 		return createResponse;
 	}
 
-	@Create(entity = "subModules", serviceName = "RuleSetService", sourceEntity = "modules")
-	public CreateResponse createmoduleLineItemFormodule(CreateRequest createRequest) {
+	@Create(entity = "SalesOrderLineItems", serviceName = "EPMSampleService", sourceEntity = "SalesOrders")
+	public CreateResponse createSalesOrderLineItemForSalesOrder(CreateRequest createRequest) {
 		CreateResponse createResponse = null;
 		EntityData SOEntity;
 		try {
 			String sourceEntityName = createRequest.getSourceEntityName();
-			//Read modules to check if the passed moduleId exists
-			if (sourceEntityName.equals("modules")) {
-				SOEntity = readmodule(createRequest.getSourceKeys());
+			//Read SalesOrders to check if the passed SalesOrderID exists
+			if (sourceEntityName.equals("SalesOrders")) {
+				SOEntity = readSalesOrder(createRequest.getSourceKeys());
 				if (SOEntity == null) {
 					ErrorResponse errorResponse = ErrorResponse.getBuilder()
-							.setMessage("Parent module does not exist").setStatusCode(401).response();
+							.setMessage("Parent SalesOrder does not exist").setStatusCode(401).response();
 					createResponse = CreateResponse.setError(errorResponse);
 				} else {
-					// You can further validate that the payload data contains the moduleId same as that in the URL.
+					// You can further validate that the payload data contains the SalesOrderID same as that in the URL.
 					// For that you can use the createRequest.getData() method and further find the specific property's value
 					createResponse = CreateResponse.setSuccess().setData(createEntity(createRequest)).response();
 				}
@@ -111,27 +111,27 @@ public class RuleSetService {
 		return createResponse;
 	}
 
-	@Read(entity = "modules", serviceName = "RuleSetService")
-	public ReadResponse getmodule(ReadRequest readRequest) {
+	@Read(entity = "SalesOrders", serviceName = "EPMSampleService")
+	public ReadResponse getSalesOrder(ReadRequest readRequest) {
 		ReadResponse readResponse = ReadResponse.setSuccess().setData(readEntity(readRequest)).response();
 		return readResponse;
 	}
 
-	@Read(entity = "subModules", serviceName = "RuleSetService")
+	@Read(entity = "SalesOrderLineItems", serviceName = "EPMSampleService")
 	public ReadResponse getSOItem(ReadRequest readRequest) {
 		ReadResponse readResponse = ReadResponse.setSuccess().setData(readEntity(readRequest)).response();
 		return readResponse;
 	}
 
-	@Update(entity = "modules", serviceName = "RuleSetService")
-	public UpdateResponse updatemodule(UpdateRequest updateRequest) {
+	@Update(entity = "SalesOrders", serviceName = "EPMSampleService")
+	public UpdateResponse updateSalesOrder(UpdateRequest updateRequest) {
 		updateEntity(updateRequest);
 		UpdateResponse updateResponse = UpdateResponse.setSuccess().response();
 		return updateResponse;
 	}
 
-	@Delete(entity = "modules", serviceName = "RuleSetService")
-	public DeleteResponse deletemodule(DeleteRequest deleteRequest) {
+	@Delete(entity = "SalesOrders", serviceName = "EPMSampleService")
+	public DeleteResponse deleteSalesOrder(DeleteRequest deleteRequest) {
 		deleteEntity(deleteRequest);
 		DeleteResponse deleteResponse = DeleteResponse.setSuccess().response();
 		return deleteResponse;
@@ -149,7 +149,7 @@ public class RuleSetService {
 		return conn;
 	}
 
-	private static Logger logger = LoggerFactory.getLogger(RuleSetService.class);
+	private static Logger logger = LoggerFactory.getLogger(EPMSampleService.class);
 
 	private List<EntityData> getEntitySet(QueryRequest queryRequest) {
 		String fullQualifiedName = queryRequest.getEntityMetadata().getNamespace() + "."
@@ -157,7 +157,7 @@ public class RuleSetService {
 		CDSDataSourceHandler dsHandler = DataSourceHandlerFactory.getInstance().getCDSHandler(getConnection(),
 				queryRequest.getEntityMetadata().getNamespace());
 		try {
-			CDSQuery cdsQuery = new CDSSelectQueryBuilder(fullQualifiedName).orderBy("moduleId", false).build();
+			CDSQuery cdsQuery = new CDSSelectQueryBuilder(fullQualifiedName).orderBy("SalesOrderID", false).build();
 			CDSSelectQueryResult cdsSelectQueryResult = dsHandler.executeQuery(cdsQuery);
 			return cdsSelectQueryResult.getResult();
 		} catch (CDSException e) {
@@ -216,14 +216,15 @@ public class RuleSetService {
 		}
 	}
 
-	private List<EntityData> getSOItemsForSO(Map<String, Object> moduleId) {
-		String fullQualifiedName = "ruleset.subModules";
-		CDSDataSourceHandler dsHandler = DataSourceHandlerFactory.getInstance().getCDSHandler(getConnection(),"ruleset");
+	private List<EntityData> getSOItemsForSO(Map<String, Object> SalesOrderID) {
+		String fullQualifiedName = "EPMSample.SalesOrderLineItems";
+		CDSDataSourceHandler dsHandler = DataSourceHandlerFactory.getInstance().getCDSHandler(getConnection(),
+				"EPMSample");
 		try {
 			CDSQuery cdsQuery = new CDSSelectQueryBuilder(fullQualifiedName)
-					.where(new ConditionBuilder().columnName("moduleId")
-							.EQ(moduleId.get("moduleId").toString()).build())
-					.orderBy("subModuleId", false).build();
+					.where(new ConditionBuilder().columnName("SalesOrderID")
+							.EQ(SalesOrderID.get("SalesOrderID").toString()).build())
+					.orderBy("SOLineItemID", false).build();
 			CDSSelectQueryResult cdsSelectQueryResult = dsHandler.executeQuery(cdsQuery);
 			return cdsSelectQueryResult.getResult();
 		} catch (CDSException e) {
@@ -232,12 +233,13 @@ public class RuleSetService {
 		return null;
 	}
 
-	private EntityData readmodule(Map<String, Object> moduleId) {
-		CDSDataSourceHandler dsHandler = DataSourceHandlerFactory.getInstance().getCDSHandler(getConnection(),"ruleset");
-		List<String> properties = Arrays.asList("moduleId");
+	private EntityData readSalesOrder(Map<String, Object> SalesOrderID) {
+		CDSDataSourceHandler dsHandler = DataSourceHandlerFactory.getInstance().getCDSHandler(getConnection(),
+				"EPMSample");
+		List<String> properties = Arrays.asList("SalesOrderID");
 		EntityData ed = null;
 		try {
-			ed = dsHandler.executeRead("modules", moduleId, properties);
+			ed = dsHandler.executeRead("SalesOrders", SalesOrderID, properties);
 		} catch (CDSException e) {
 			//Handle exception here
 			e.printStackTrace();

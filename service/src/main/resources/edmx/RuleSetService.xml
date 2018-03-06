@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+	<edmx:DataServices>
+		<Schema Namespace="ruleset" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+			<EntityType Name="module">
+				<Key>
+					<PropertyRef Name="moduleId"/>
+				</Key>
+				<Property Name="moduleId" Type="Edm.String"/>
+				<Property Name="moduleName" Type="Edm.String"/>
+				<NavigationProperty Name="subModules" Type="Collection(ruleset.subModule)" Partner="module"/>
+			</EntityType>
+			<EntityType Name="subModule">
+				<Key>
+					<PropertyRef Name="subModuleId"/>
+				</Key>
+				<Property Name="subModuleId" Type="Edm.String"/>
+				<Property Name="moduleId" Type="Edm.String"/>
+				<Property Name="subModuleName" Type="Edm.String"/>
+				<NavigationProperty Name="module" Type="ruleset.module" Nullable="false" Partner="subModules"/>
+			</EntityType>
+			<EntityContainer Name="EntityContainer" p4:LazyLoadingEnabled="true" xmlns:p4="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+				<EntitySet Name="modules" EntityType="ruleset.module">
+					<NavigationPropertyBinding Path="subModules" Target="subModules"/>
+				</EntitySet>
+				<EntitySet Name="subModules" EntityType="ruleset.subModule">
+					<NavigationPropertyBinding Path="module" Target="modules"/>
+				</EntitySet>
+			</EntityContainer>
+		</Schema>
+	</edmx:DataServices>
+</edmx:Edmx>

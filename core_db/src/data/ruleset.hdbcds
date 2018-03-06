@@ -1,25 +1,17 @@
-/*namespace Insights.core_db.data;*/
-
 context ruleset {
+    type TmoduleId : String(10);
+    type TsubModuleId : String(10);
+    type TmoduleName : String(60);
+    type TsubModuleName : String(60);
 
-    /*@@layout{"layoutInfo":{"x":347,"y":-80.5}}*/
-    entity module {
-        key moduleId   : String(10) not null;
-            moduleName : String(60) not null;
-            subModules : Association [0..*] to subModule on subModules.moduleId=moduleId;
-    };
+    entity modules {
+        key moduleId   : TmoduleId not null;
+            moduleName : TmoduleName;
+    }
 
-    /*@@layout{"layoutInfo":{"x":626,"y":-80.5}}*/
-    entity subModule {
-        key moduleId      : String(10) not null;
-        key subModuleId   : String(10) not null;
-            subModuleName : String(60) not null;
-            toModule	  : Association [1] to module on toModule.moduleId=moduleId;
-    };
-	define view moduleDetail as SELECT from module {
-		moduleId,
-		moduleName,
-		subModules.subModuleId,
-		subModules.subModuleName
-	};
+    entity subModules {
+        key moduleId      : TmoduleId not null;
+        key subModuleId   : TsubModuleId not null;
+            subModuleName : TsubModuleName;
+    }
 };
