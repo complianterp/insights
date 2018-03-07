@@ -38,64 +38,64 @@ import com.sap.cloud.sdk.service.prov.api.response.UpdateResponse;
  *
  * @author S0016910852
  */
-public class RuleSetService {
+public class ruleset {
 
-	@Query(entity = "modules", serviceName = "RuleSetService")
-	public QueryResponse getAllmodules(QueryRequest queryRequest) {
+	@Query(entity = "modules", serviceName = "ruleset")
+	public QueryResponse getAllModules(QueryRequest queryRequest) {
 		QueryResponse queryResponse = QueryResponse.setSuccess().setEntityData(getEntitySet(queryRequest)).response();
 		return queryResponse;
 	}
 
-	@Query(entity = "subModules", serviceName = "RuleSetService")
-	public QueryResponse getAllSOLineItems(QueryRequest queryRequest) {
+	@Query(entity = "subModules", serviceName = "ruleset")
+	public QueryResponse getAllSubModules(QueryRequest queryRequest) {
 		QueryResponse queryResponse = QueryResponse.setSuccess().setEntityData(getEntitySet(queryRequest)).response();
 		return queryResponse;
 	}
 
-	@Query(entity = "subModules", serviceName = "RuleSetService", sourceEntity = "modules")
-	public QueryResponse getSOLineItemsForSO(QueryRequest queryRequest) {
+	@Query(entity = "subModules", serviceName = "ruleset", sourceEntity = "modules")
+	public QueryResponse getSubModulesForModule(QueryRequest queryRequest) {
 		QueryResponse queryResponse = null;
-		EntityData SOEntity;
+		EntityData ModuleEntity;
 		try {
 			String sourceEntityName = queryRequest.getSourceEntityName();
 			//Read modules to check if the passed moduleId exists
 			if (sourceEntityName.equals("modules")) {
-				SOEntity = readmodule(queryRequest.getSourceKeys());
-				if (SOEntity == null) {
+				ModuleEntity = readModule(queryRequest.getSourceKeys());
+				if (ModuleEntity == null) {
 					ErrorResponse errorResponse = ErrorResponse.getBuilder()
-							.setMessage("Parent module does not exist").setStatusCode(401).response();
+							.setMessage("Parent module does not exist").setStatusCode(401).response();							
 					queryResponse = QueryResponse.setError(errorResponse);
 				} else {
 					queryResponse = QueryResponse.setSuccess()
-							.setEntityData(getSOItemsForSO(queryRequest.getSourceKeys())).response();
+							.setEntityData(getSubModDetailsForModule(queryRequest.getSourceKeys())).response();
 				}
 			}
 		} catch (Exception e) {
-			logger.error("==> Exception fetching SOItems for a SO from CDS: " + e.getMessage());
+			logger.error("==> Exception fetching sub-modules for a module from CDS: " + e.getMessage());
 			queryResponse = QueryResponse
 					.setError(ErrorResponse.getBuilder().setMessage(e.getMessage()).setCause(e).response());
 		}
 		return queryResponse;
 	}
 
-	@Create(entity = "modules", serviceName = "RuleSetService")
-	public CreateResponse createmodule(CreateRequest createRequest) {
+	@Create(entity = "modules", serviceName = "ruleset")
+	public CreateResponse createModule(CreateRequest createRequest) {
 		CreateResponse createResponse = CreateResponse.setSuccess().setData(createEntity(createRequest)).response();
 		return createResponse;
 	}
 
-	@Create(entity = "subModules", serviceName = "RuleSetService", sourceEntity = "modules")
-	public CreateResponse createmoduleLineItemFormodule(CreateRequest createRequest) {
+	@Create(entity = "subModules", serviceName = "ruleset", sourceEntity = "modules")
+	public CreateResponse createSubModuleForModule(CreateRequest createRequest) {
 		CreateResponse createResponse = null;
-		EntityData SOEntity;
+		EntityData ModuleEntity;
 		try {
 			String sourceEntityName = createRequest.getSourceEntityName();
 			//Read modules to check if the passed moduleId exists
 			if (sourceEntityName.equals("modules")) {
-				SOEntity = readmodule(createRequest.getSourceKeys());
-				if (SOEntity == null) {
+				ModuleEntity = readModule(createRequest.getSourceKeys());
+				if (ModuleEntity == null) {
 					ErrorResponse errorResponse = ErrorResponse.getBuilder()
-							.setMessage("Parent module does not exist").setStatusCode(401).response();
+							.setMessage("Parent module does not exist").setStatusCode(401).response();							
 					createResponse = CreateResponse.setError(errorResponse);
 				} else {
 					// You can further validate that the payload data contains the moduleId same as that in the URL.
@@ -104,33 +104,57 @@ public class RuleSetService {
 				}
 			}
 		} catch (Exception e) {
-			logger.error("==> Exception while creating a SOItem for a SO in CDS: " + e.getMessage());
+			logger.error("==> Exception while creating a sub-module for a module in CDS: " + e.getMessage());
 			createResponse = CreateResponse
 					.setError(ErrorResponse.getBuilder().setMessage(e.getMessage()).setCause(e).response());
 		}
 		return createResponse;
 	}
 
-	@Read(entity = "modules", serviceName = "RuleSetService")
-	public ReadResponse getmodule(ReadRequest readRequest) {
+	@Read(entity = "modules", serviceName = "ruleset")
+	public ReadResponse getModule(ReadRequest readRequest) {
 		ReadResponse readResponse = ReadResponse.setSuccess().setData(readEntity(readRequest)).response();
 		return readResponse;
 	}
 
-	@Read(entity = "subModules", serviceName = "RuleSetService")
-	public ReadResponse getSOItem(ReadRequest readRequest) {
+	@Read(entity = "subModules", serviceName = "ruleset")
+	public ReadResponse getSubModule(ReadRequest readRequest) {
 		ReadResponse readResponse = ReadResponse.setSuccess().setData(readEntity(readRequest)).response();
 		return readResponse;
 	}
 
-	@Update(entity = "modules", serviceName = "RuleSetService")
-	public UpdateResponse updatemodule(UpdateRequest updateRequest) {
+	//@Read(entity = "subModules", serviceName = "ruleset", sourceEntity = "modules")
+	//public ReadResponse readSalesOrderLineItem(ReadRequest readRequest) {
+		//try {
+		//	String entitySetName = readRequest.getEntityName();						// Retrieve the name of the entity set from the ReadRequest object
+		//	Map<String, Object> keys = readRequest.getKeys();						// Retrieve the keys of the entity from the ReadRequest object
+		//	String sourceEntitySetName = readRequest.getSourceEntityName();			// Retrieve the name of the parent entity specified in the navigation
+		//	Map<String, Object> sourceEntityKeys = readRequest.getSourceKeys();		// Retrieve the keys of the parent entity specified in the navigation
+			// Add your implementation of the read operation here
+		//	EntityData entityData = getSubModuleForModule(entitySetName, sourceEntitySetName, sourceEntityKeys);
+			// Return an instance of ReadResponse in case of success
+			//return ReadResponse.setSuccess().setData(entityData).response();
+		//} catch (Exception e) {
+		// Return an instance of ReadResponse containing the error in case of failure
+		//	ErrorResponse errorResponse = ErrorResponse.getBuilder()
+		//	.setMessage(e.getMessage())
+		//	.setStatusCode(INTERNAL_SERVER_ERROR)
+		//	.setCause(e)
+		//	.response();
+		//return ReadResponse.setError(errorResponse);
+		//return "";
+		//}
+	//}
+
+
+	@Update(entity = "modules", serviceName = "ruleset")
+	public UpdateResponse updateModule(UpdateRequest updateRequest) {
 		updateEntity(updateRequest);
 		UpdateResponse updateResponse = UpdateResponse.setSuccess().response();
 		return updateResponse;
 	}
 
-	@Delete(entity = "modules", serviceName = "RuleSetService")
+	@Delete(entity = "modules", serviceName = "ruleset")
 	public DeleteResponse deletemodule(DeleteRequest deleteRequest) {
 		deleteEntity(deleteRequest);
 		DeleteResponse deleteResponse = DeleteResponse.setSuccess().response();
@@ -149,7 +173,7 @@ public class RuleSetService {
 		return conn;
 	}
 
-	private static Logger logger = LoggerFactory.getLogger(RuleSetService.class);
+	private static Logger logger = LoggerFactory.getLogger(ruleset.class);
 
 	private List<EntityData> getEntitySet(QueryRequest queryRequest) {
 		String fullQualifiedName = queryRequest.getEntityMetadata().getNamespace() + "."
@@ -214,9 +238,9 @@ public class RuleSetService {
 			//Handle exception here
 			e.printStackTrace();
 		}
-	}
-
-	private List<EntityData> getSOItemsForSO(Map<String, Object> moduleId) {
+	}			
+				
+	private List<EntityData> getSubModDetailsForModule(Map<String, Object> moduleId) {
 		String fullQualifiedName = "ruleset.subModules";
 		CDSDataSourceHandler dsHandler = DataSourceHandlerFactory.getInstance().getCDSHandler(getConnection(),"ruleset");
 		try {
@@ -232,7 +256,9 @@ public class RuleSetService {
 		return null;
 	}
 
-	private EntityData readmodule(Map<String, Object> moduleId) {
+
+
+	private EntityData readModule(Map<String, Object> moduleId) {
 		CDSDataSourceHandler dsHandler = DataSourceHandlerFactory.getInstance().getCDSHandler(getConnection(),"ruleset");
 		List<String> properties = Arrays.asList("moduleId");
 		EntityData ed = null;
